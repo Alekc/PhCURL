@@ -3,7 +3,7 @@
  * Class PhCURL
  *
  * @author Alexander Chernov
- * @version 1.0.1
+ * @version 1.0.2
  * @see https://github.com/Alekc/PhCurl
  * @license GPL-V2
  */
@@ -82,6 +82,20 @@ class PhCURL
         }
         $this->_handle = curl_init($url);
     }
+
+    /**
+    * Shortcut for creation
+    *
+    * @param mixed $url
+    * @return PhCURL
+    */
+    public static function create($url = ""){
+        $c = __CLASS__;
+        $instance = new $c($url);
+        $instance->loadCommonSettings();
+        return $instance;
+    }
+
 
     /**               BOOLEAN SETTINGS                   **/
 
