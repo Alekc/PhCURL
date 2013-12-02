@@ -3,7 +3,7 @@
  * Class PhCURL
  *
  * @author Alexander Chernov
- * @version 1.0
+ * @version 1.0.1
  * @see https://github.com/Alekc/PhCurl
  * @license GPL-V2
  */
@@ -1605,7 +1605,7 @@ class PhCURL
     }
 
     public function POST($dontAutoAddParams = false){
-        $this->setMethod(self::METHOD_GET);
+        $this->setMethod(self::METHOD_POST);
         //check for params
         if ($dontAutoAddParams && count($this->_params)){
             $this->setPostFields($this->_params);
