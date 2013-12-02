@@ -1621,7 +1621,7 @@ class PhCURL
     public function POST($dontAutoAddParams = false){
         $this->setMethod(self::METHOD_POST);
         //check for params
-        if ($dontAutoAddParams && count($this->_params)){
+        if (!$dontAutoAddParams && count($this->_params)){
             $this->setPostFields($this->_params);
         }
         return $this->execute();
@@ -1650,7 +1650,9 @@ class PhCURL
     public function addParams($params)
     {
         if (count($params)){
-
+            foreach ($params as $key=>$val){
+                $this->_params[$key] = $val;
+            }
         }
         return $this;
     }
