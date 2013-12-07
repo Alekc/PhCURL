@@ -3,7 +3,7 @@
  * Class PhCURL
  *
  * @author Alexander Chernov
- * @version 1.0.3
+ * @version 1.0.4
  * @see https://github.com/Alekc/PhCurl
  * @license GPL-V2
  */
@@ -1687,5 +1687,6 @@ class PhCURL
 
     public function close(){
         curl_close($this->_handle);
+        return $this;
     }
 }
