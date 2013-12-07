@@ -3,7 +3,7 @@
  * Class PhCURL
  *
  * @author Alexander Chernov
- * @version 1.0.2
+ * @version 1.0.3
  * @see https://github.com/Alekc/PhCurl
  * @license GPL-V2
  */
