@@ -1681,7 +1681,8 @@ class PhCURL
              ->enableFollowLocation(true)
              ->setMaxRedirects(10)
              ->enableHeaderOut(true)
-             ->enableHeaderInOutput(true);
+             ->enableHeaderInOutput(true)
+             ->setUserAgent();
     }
 
     public function close(){
