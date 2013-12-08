@@ -3,7 +3,7 @@
  * Class PhCURL
  *
  * @author  Alexander Chernov
- * @version 1.0.4
+ * @version 1.0.5
  * @see     https://github.com/Alekc/PhCurl
  * @license GPL-V2
  */
@@ -389,11 +389,9 @@ class PhCURL {
      * TRUE to reset the HTTP request method to GET.
      * Since GET is the default, this is only necessary if the request method has been changed
      *
-     * @param $value
-     *
      * @return PhCURL
      */
-    public function enableHttpGet($value)
+    public function enableHttpGet()
     {
         $this->setMethod(self::METHOD_GET);
 
@@ -508,11 +506,10 @@ class PhCURL {
      * TRUE to HTTP PUT a file. The file to PUT must be set with
      * CURLOPT_INFILE and CURLOPT_INFILESIZ
      *
-     * @param $value
      *
      * @return PhCURL
      */
-    public function enableHttpPut($value)
+    public function enableHttpPut()
     {
         $this->setMethod(self::METHOD_PUT);
 
@@ -1085,6 +1082,9 @@ class PhCURL {
      */
     public function setSshAuthTypes($value)
     {
+        if (!defined(CURLOPT_SSH_AUTH_TYPES)){
+            throw new Exception("You should have curl 7.16.1 for using this function");
+        }
         switch ($value) {
             case self::SSH_AUTH_ANY:
             case self::SSH_AUTH_HOST:
@@ -1530,6 +1530,11 @@ class PhCURL {
 
     //todo: kerberous
 
+    /**
+     * @param $value
+     *
+     * @return $this
+     */
     public function setSslKeypasswd($value)
     {
         curl_setopt($this->_handle, CURLOPT_SSLKEYPASSWD, $value);
@@ -1856,6 +1861,9 @@ class PhCURL {
         return (object) curl_getinfo($this->_handle);
     }
 
+    /**
+     * @return PhCURL
+     */
     public function GET()
     {
         $this->setMethod(self::METHOD_GET);
@@ -1868,6 +1876,11 @@ class PhCURL {
         return $this->execute();
     }
 
+    /**
+     * @param bool $dontAutoAddParams
+     *
+     * @return PhCURL
+     */
     public function POST($dontAutoAddParams = false)
     {
         $this->setMethod(self::METHOD_POST);
@@ -1880,6 +1893,9 @@ class PhCURL {
     }
 
 
+    /**
+     * @return null
+     */
     public function getData()
     {
         return $this->_data;
@@ -1896,6 +1912,12 @@ class PhCURL {
         return $this;
     }
 
+    /**
+     * @param $name
+     * @param $value
+     *
+     * @return $this
+     */
     public function addParam($name, $value)
     {
         $this->_params[$name] = $value;
@@ -1903,6 +1925,11 @@ class PhCURL {
         return $this;
     }
 
+    /**
+     * @param $params
+     *
+     * @return $this
+     */
     public function addParams($params)
     {
         if (count($params)) {
@@ -1934,6 +1961,9 @@ class PhCURL {
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function loadCommonSettings()
     {
         $this->enableReturnTransfer(true)
@@ -1942,8 +1972,12 @@ class PhCURL {
              ->enableHeaderOut(true)
              ->enableHeaderInOutput(true)
              ->setUserAgent();
+        return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function close()
     {
         curl_close($this->_handle);
