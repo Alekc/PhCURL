@@ -1,0 +1,26 @@
+{
+    "name": "alekc/phcurl",
+    "type": "library",
+    "description": "Php Curl Interface Library",
+    "keywords": ["curl", "php", "library"],
+    "homepage": "https://github.com/Alekc/PhCurl",
+    "license": "GPL v2",
+    "authors": [
+        {
+            "name": "Alexander Chernov",
+            "email": "alekcander@gmail.com",
+            "role": "Developer/Creator"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/Alekc/PhCurl/issues"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.3.0",
+        "ext-curl": "*"
+    },
+    "autoload": {
+        "psr-0": { "PhCURL": "src/" }
+    }
+}

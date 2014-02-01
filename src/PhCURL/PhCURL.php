@@ -1,13 +1,17 @@
 <?php
-/**
- * Class PhCURL
- *
- * @author  Alexander Chernov
- * @version 1.0.5
- * @see     https://github.com/Alekc/PhCurl
- * @license GPL-V2
- */
-class PhCURL {
+/*
+* This file is part of the PhCurl package.
+*
+* (c) Alexander Chernov <alekcander@gmail.com>
+*
+* For the full copyright and license information, please view the LICENSE
+* file that was distributed with this source code.
+*/
+
+namespace PhCurl;
+
+class PhCURL
+{
     /**
      * Curl handle
      *
