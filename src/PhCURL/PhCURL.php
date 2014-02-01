@@ -61,7 +61,8 @@ class PhCURL
     const SSH_AUTH_PASSWORD  = CURLSSH_AUTH_PASSWORD;
     const SSH_AUTH_HOST      = CURLSSH_AUTH_HOST;
     const SSH_AUTH_KEYBOARD  = CURLSSH_AUTH_KEYBOARD;
-    const SSH_AUTH_ANY       = CURLSSH_AUTH_ANY;
+    //todo: find another way
+    //const SSH_AUTH_ANY       = CURLSSH_AUTH_ANY;
 
     const METHOD_POST = "post";
     const METHOD_GET  = "get";
