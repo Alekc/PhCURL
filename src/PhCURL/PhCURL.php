@@ -731,11 +731,9 @@ class PhCURL
     {
         if ($version == "1.0") {
             curl_setopt($this->_handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        }
-        elseif ($version == "1.1") {
+        } elseif ($version == "1.1") {
             curl_setopt($this->_handle, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
-        }
-        else {
+        } else {
             curl_setopt($this->_handle, CURL_HTTP_VERSION_NONE, CURL_HTTP_VERSION_1_1);
         }
 
@@ -1086,7 +1084,7 @@ class PhCURL
      */
     public function setSshAuthTypes($value)
     {
-        if (!defined(CURLOPT_SSH_AUTH_TYPES)){
+        if (!defined(CURLOPT_SSH_AUTH_TYPES)) {
             throw new Exception("You should have curl 7.16.1 for using this function");
         }
         switch ($value) {
@@ -1946,6 +1944,19 @@ class PhCURL
     }
 
     /**
+     * Clear old params and set a new ones
+     *
+     * @param $params
+     *
+     * @return PhCURL
+     */
+    public function setParams($params)
+    {
+        $this->_params = array();
+        return $this->addParams($params);
+    }
+
+    /**
      * Execute Request
      *
      * @return PhCURL
@@ -1957,8 +1968,7 @@ class PhCURL
         if ($this->_headersInOutput && preg_match('/(.*?)\r\n\r\n(.*?)$/s', $output, $regs)) {
             $this->_data         = $regs[2];
             $this->_inputHeaders = $regs[1];
-        }
-        else {
+        } else {
             $this->_data = $output;
         }
 
