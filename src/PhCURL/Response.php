@@ -14,6 +14,10 @@ class Response
         $this->headers   = $headers; //todo: check if headers are transmitted
     }
 
+    public function getBody()
+    {
+        return $this->body;
+    }
     public function getAllHeaders()
     {
         return $this->headers;
