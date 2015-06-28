@@ -1871,7 +1871,7 @@ class PhCURL
     }
 
     /**
-     * @return PhCURL
+     * @return Response
      */
     public function GET()
     {
@@ -1888,7 +1888,7 @@ class PhCURL
     /**
      * @param bool $dontAutoAddParams
      *
-     * @return PhCURL
+     * @return Response
      */
     public function POST($dontAutoAddParams = false)
     {
@@ -1973,11 +1973,12 @@ class PhCURL
             $this->totalHeadersLength = 0;
         }
         $output   = curl_exec($this->_handle);
+        if ($output === false) throw new \Exception("Error during download"); //todo: change exception type.
         if ($this->_headersInOutput){
             //remove headers from response
             $output = substr($output,$this->totalHeadersLength);
         }
-        $response = new Response($output, $this->_handle, $this->_receivedHeaders);
+        $response = new Response($output, $this->_receivedHeaders,$this->_handle);
 
         return $response;
     }
