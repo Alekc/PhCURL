@@ -25,6 +25,12 @@ class PhCURL
 
     protected $_url = null;
 
+    protected $_receivedHeaders = [];
+
+    protected $_headersBuffer = [];
+
+    protected $totalHeadersLength = 0;
+
     /**
      * Flag to indicate that headers are required in output
      *
@@ -68,8 +74,8 @@ class PhCURL
     const METHOD_GET  = "get";
     const METHOD_PUT  = "put";
 
-    const CLOSEPOLICY_LEAST_RECENTLY_USED = CURLCLOSEPOLICY_LEAST_RECENTLY_USED;
-    const CLOSEPOLICY_OLDEST              = CURLCLOSEPOLICY_OLDEST;
+//    const CLOSEPOLICY_LEAST_RECENTLY_USED = CURLCLOSEPOLICY_LEAST_RECENTLY_USED;
+//    const CLOSEPOLICY_OLDEST              = CURLCLOSEPOLICY_OLDEST;
 
     const FTPAUTH_DEFAULT = CURLFTPAUTH_DEFAULT;
     const FTPAUTH_SSL     = CURLFTPAUTH_SSL;
@@ -96,8 +102,8 @@ class PhCURL
      */
     public static function create($url = "")
     {
-        $c        = __CLASS__;
-        $instance = new $c($url);
+        /** @var self $instance */
+        $instance = new static($url);
         $instance->loadCommonSettings();
 
         return $instance;
@@ -1958,22 +1964,45 @@ class PhCURL
     }
 
     /**
-     * Execute Request
-     *
-     * @return PhCURL
+     * @return Response
      */
     public function execute()
     {
-        $output = curl_exec($this->_handle);
-        //do i need to split output?
-        if ($this->_headersInOutput && preg_match('/(.*?)\r\n\r\n(.*?)$/s', $output, $regs)) {
-            $this->_data         = $regs[2];
-            $this->_inputHeaders = $regs[1];
-        } else {
-            $this->_data = $output;
+        if ($this->_headersInOutput) {
+            curl_setopt($this->_handle, CURLOPT_HEADERFUNCTION, [$this, 'headerCallBack']);
+            $this->totalHeadersLength = 0;
+        }
+        $output   = curl_exec($this->_handle);
+        if ($this->_headersInOutput){
+            //remove headers from response
+            $output = substr($output,$this->totalHeadersLength);
+        }
+        $response = new Response($output, $this->_handle, $this->_receivedHeaders);
+
+        return $response;
+    }
+
+    protected function headerCallBack($ch, $header_line)
+    {
+        $headerLength = strlen($header_line);
+        $this->totalHeadersLength += $headerLength;
+        if (preg_match('/^HTTP.*? (\d{3})/', $header_line, $out)) {
+            $this->_headersBuffer['HttpStatusCode'] = $out[1];
+            return $headerLength;
+        } //remove HTTP response
+
+        if ($header_line == "\r\n") {
+            //this is the end of header block, move buffer to result and reset it.
+            $this->_receivedHeaders[] = $this->_headersBuffer;
+            $this->_headersBuffer     = [];
+            return $headerLength;
         }
 
-        return $this;
+        //fetch the key and val, and assign it to headers buffer.
+        list($key, $val) = explode(":", $header_line, 2);
+        $this->_headersBuffer[$key] = trim($val);
+
+        return $headerLength;
     }
 
     /**
