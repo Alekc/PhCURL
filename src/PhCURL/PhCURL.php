@@ -1973,7 +1973,7 @@ class PhCURL
             $this->totalHeadersLength = 0;
         }
         $output   = curl_exec($this->_handle);
-        if ($output === false) throw new \Exception("Error during download"); //todo: change exception type.
+        if ($output === false) throw new \Exception("Error during download " . curl_error($this->_handle)); //todo: change exception type.
         if ($this->_headersInOutput){
             //remove headers from response
             $output = substr($output,$this->totalHeadersLength);
